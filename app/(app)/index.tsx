@@ -1,29 +1,32 @@
-import { useAuthStore } from '../../src/state/useAuthStore';
-import { Screen } from '../../src/components/primitives/Screen';
-import { Stack } from '../../src/components/primitives/Stack';
-import { Text } from '../../src/components/primitives/Text';
-import { EmptyState } from '../../src/components/primitives/EmptyState';
-import { StyledButton } from '../../src/components/StyledButton';
-import {Badge} from "@/components/primitives";
+import { useMeterStore } from '@/state/useMeterStore';
+import { Badge } from '@/components/primitives/Badge';
+import { Screen } from '@/components/primitives/Screen';
+import { Stack } from '@/components/primitives/Stack';
+import { ScreenHeader } from '@/components/ScreenHeader';
+import { DemoReadingPicker } from '@/components/meter/DemoReadingPicker';
+import { SafeTimeCard } from '@/components/meter/SafeTimeCard';
+import { SoundLevelGauge } from '@/components/meter/SoundLevelGauge';
 
-export default function HomeScreen() {
-  const { user, logout } = useAuthStore();
+export default function MeterScreen() {
+  const { demoReadings, selectedDemoId, selectDemo } = useMeterStore();
+  const selected = demoReadings.find((reading) => reading.id === selectedDemoId);
 
   return (
-    <Screen padding="lg">
+    <Screen padding="lg" testID="meter-screen">
       <Stack gap="lg">
-        <Text size="xl" weight="bold">
-          {user !== null ? `Welcome, ${user.name}` : 'Welcome'}
-        </Text>
-        <Text>Your items will appear here once you connect Supabase.</Text>
-        <Badge label={'Succes badge'} variant={"success"} />
-        <EmptyState
-          title="No items yet"
-          description="Implement getItems() in your itemService to load data."
+        <ScreenHeader
+          title="Sound meter"
+          subtitle="How loud is it around you?"
+          accessory={<Badge label="Demo" variant="warning" testID="demo-badge" />}
         />
-        <StyledButton label="Log out" onPress={logout} variant="secondary" />
+        {selected !== undefined && (
+          <>
+            <SoundLevelGauge db={selected.db} />
+            <SafeTimeCard db={selected.db} />
+          </>
+        )}
+        <DemoReadingPicker readings={demoReadings} selectedId={selectedDemoId} onSelect={selectDemo} />
       </Stack>
     </Screen>
   );
 }
-

@@ -1,58 +1,42 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { useAuthStore } from '../src/state/useAuthStore';
-import { InputField } from '../src/components/primitives/InputField';
-import { StyledButton } from '../src/components/StyledButton';
-import { Stack } from '../src/components/primitives/Stack';
-import { Text } from '../src/components/primitives/Text';
+import { useAuthStore } from '@/state/useAuthStore';
+import { AuthHeader } from '@/components/auth/AuthHeader';
+import { DemoCredentials } from '@/components/auth/DemoCredentials';
+import { LoginForm } from '@/components/auth/LoginForm';
+import { Screen } from '@/components/primitives/Screen';
+import { Stack } from '@/components/primitives/Stack';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const { login, isLoading } = useAuthStore();
+  const [error, setError] = useState<string | undefined>(undefined);
+  const { login, isLoading, demoCredentials } = useAuthStore();
 
-  const handleLogin = async () => {
-    setError('');
+  const handleLogin = async (email: string, password: string) => {
+    setError(undefined);
     try {
       await login(email, password);
       router.replace('/');
     } catch {
-      setError('Login failed. Check your credentials.');
+      setError('Login failed. Check your email and password.');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Stack gap="lg" padding="lg">
-        <Text size="xl" weight="bold" align="center">Welcome back</Text>
-        <InputField
-          label="Email"
-          value={email}
-          onChangeText={setEmail}
-          placeholder="you@example.com"
-          testID="email-input"
-        />
-        <InputField
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          testID="password-input"
-          error={error !== '' ? error : undefined}
-        />
-        <StyledButton
-          label="Log in"
-          onPress={handleLogin}
-          isLoading={isLoading}
-          testID="login-button"
-        />
-      </Stack>
-    </View>
+    <Screen padding="lg" testID="login-screen">
+      <View style={styles.container}>
+        <Stack gap="lg">
+          <AuthHeader title="EarGuard" subtitle="Enjoy the music, keep your hearing." />
+          <LoginForm onSubmit={handleLogin} isLoading={isLoading} error={error} />
+          {demoCredentials !== undefined && (
+            <DemoCredentials email={demoCredentials.email} password={demoCredentials.password} />
+          )}
+        </Stack>
+      </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 420, alignSelf: 'center' },
 });

@@ -1,3 +1,7 @@
+// Demo account from src/services/mock/users.ts (login is mocked for the PWA).
+const testEmail = 'demo@earguard.app';
+const testPassword = 'festival123';
+
 describe('Login screen', () => {
   beforeEach(() => {
     cy.visit('/login');
@@ -9,15 +13,20 @@ describe('Login screen', () => {
     cy.get('[data-testid="login-button"]').should('exist');
   });
 
-  it('logs in with valid credentials and navigates to home', () => {
-    // Replace with your Supabase test credentials before running this test
-    const testEmail = 'test@example.com';
-    const testPassword = 'password123';
-
-    cy.get('[data-testid="email-input"]').type(testEmail);
-    cy.get('[data-testid="password-input"]').type(testPassword);
+  it('shows an error with a wrong password', () => {
+    cy.typeInto('email-input', testEmail);
+    cy.typeInto('password-input', 'wrong-password');
     cy.get('[data-testid="login-button"]').click();
 
-    cy.url().should('include', '/');
+    cy.get('[data-testid="password-input-error"]').should('be.visible');
+    cy.url().should('include', '/login');
+  });
+
+  it('logs in with valid credentials and navigates to the meter', () => {
+    cy.typeInto('email-input', testEmail);
+    cy.typeInto('password-input', testPassword);
+    cy.get('[data-testid="login-button"]').click();
+
+    cy.get('[data-testid="meter-screen"]').should('be.visible');
   });
 });

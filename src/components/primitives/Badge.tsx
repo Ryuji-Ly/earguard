@@ -1,15 +1,26 @@
 import { View, StyleSheet } from 'react-native';
-import { Text } from './Text';
+import { Text, type TextTone } from './Text';
+import { colors, radius, spacing } from '@/theme';
+
+type BadgeVariant = 'default' | 'success' | 'warning' | 'error';
 
 interface BadgeProps {
   label: string;
-  variant?: 'default' | 'success' | 'warning' | 'error';
+  variant?: BadgeVariant;
+  testID?: string;
 }
 
-export function Badge({ label, variant = 'default' }: BadgeProps) {
+const toneByVariant: Record<BadgeVariant, TextTone> = {
+  default: 'default',
+  success: 'safe',
+  warning: 'caution',
+  error: 'danger',
+};
+
+export function Badge({ label, variant = 'default', testID }: BadgeProps) {
   return (
-    <View style={[styles.base, styles[variant]]}>
-      <Text size="sm">{label}</Text>
+    <View style={[styles.base, styles[variant]]} testID={testID}>
+      <Text size="sm" weight="bold" tone={toneByVariant[variant]}>{label}</Text>
     </View>
   );
 }
@@ -17,20 +28,20 @@ export function Badge({ label, variant = 'default' }: BadgeProps) {
 const styles = StyleSheet.create({
   base: {
     alignSelf: 'flex-start',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 999,
+    paddingHorizontal: spacing.sm + 2,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.pill,
   },
   default: {
-    backgroundColor: '#e5e7eb',
+    backgroundColor: colors.surfaceRaised,
   },
   success: {
-    backgroundColor: '#d1fae5',
+    backgroundColor: colors.safeSoft,
   },
   warning: {
-    backgroundColor: '#fef3c7',
+    backgroundColor: colors.cautionSoft,
   },
   error: {
-    backgroundColor: '#fee2e2',
+    backgroundColor: colors.dangerSoft,
   },
 });

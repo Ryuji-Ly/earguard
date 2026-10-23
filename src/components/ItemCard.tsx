@@ -1,7 +1,7 @@
-import type { Item } from '../types/Item';
-import { Card } from './primitives/Card';
-import { Stack } from './primitives/Stack';
-import { Text } from './primitives/Text';
+import type { Item } from '@/types/Item';
+import { Card } from '@/components/primitives/Card';
+import { Stack } from '@/components/primitives/Stack';
+import { Text } from '@/components/primitives/Text';
 
 interface ItemCardProps {
   item: Item;

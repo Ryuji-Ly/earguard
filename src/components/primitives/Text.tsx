@@ -1,32 +1,35 @@
 import { Text as RNText, StyleSheet } from 'react-native';
+import { colors, fontSize, lineHeight } from '@/theme';
+
+export type TextTone = 'default' | 'muted' | 'inverse' | 'primary' | 'safe' | 'caution' | 'danger';
 
 interface TextProps {
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'display';
   weight?: 'normal' | 'medium' | 'bold';
-  color?: string;
+  tone?: TextTone;
   align?: 'left' | 'center' | 'right';
   numberOfLines?: number;
+  accessibilityRole?: 'header' | 'text';
+  testID?: string;
 }
 
 export function Text({
   children,
   size = 'md',
   weight = 'normal',
-  color,
+  tone = 'default',
   align = 'left',
   numberOfLines,
+  accessibilityRole,
+  testID,
 }: TextProps) {
   return (
     <RNText
-      style={[
-        styles.base,
-        styles[size],
-        styles[weight],
-        { textAlign: align },
-        color !== undefined && { color },
-      ]}
+      style={[styles.base, styles[size], styles[weight], styles[tone], { textAlign: align }]}
       numberOfLines={numberOfLines}
+      accessibilityRole={accessibilityRole}
+      testID={testID}
     >
       {children}
     </RNText>
@@ -35,13 +38,21 @@ export function Text({
 
 const styles = StyleSheet.create({
   base: {
-    color: '#111827',
+    color: colors.text,
   },
-  sm: { fontSize: 12, lineHeight: 16 },
-  md: { fontSize: 14, lineHeight: 20 },
-  lg: { fontSize: 16, lineHeight: 24 },
-  xl: { fontSize: 20, lineHeight: 28 },
+  sm: { fontSize: fontSize.sm, lineHeight: lineHeight.sm },
+  md: { fontSize: fontSize.md, lineHeight: lineHeight.md },
+  lg: { fontSize: fontSize.lg, lineHeight: lineHeight.lg },
+  xl: { fontSize: fontSize.xl, lineHeight: lineHeight.xl },
+  display: { fontSize: fontSize.display, lineHeight: lineHeight.display },
   normal: { fontWeight: '400' },
   medium: { fontWeight: '500' },
   bold: { fontWeight: '700' },
+  default: { color: colors.text },
+  muted: { color: colors.textMuted },
+  inverse: { color: colors.textInverse },
+  primary: { color: colors.primary },
+  safe: { color: colors.safe },
+  caution: { color: colors.caution },
+  danger: { color: colors.danger },
 });

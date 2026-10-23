@@ -2,6 +2,7 @@ import type { StorybookConfig } from '@storybook/react-vite';
 import { mergeConfig } from 'vite';
 import { transformAsync } from '@babel/core';
 import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 const REACT_NATIVE_PACKAGE_REGEX = /node_modules\/(react-native|@react-native|@expo|expo(-[a-z-]+)?)\/.*\.js$/;
 
@@ -52,6 +53,8 @@ const config: StorybookConfig = {
       resolve: {
         alias: {
           'react-native': 'react-native-web',
+          // Same alias as tsconfig "paths", so components can import from '@/...'.
+          '@': resolve(process.cwd(), 'src'),
         },
       },
       plugins: [reactNativeVitePlugin],
