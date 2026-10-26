@@ -27,16 +27,21 @@ jobs:
       - name: Build web
         run: npm run build:web
 
-      # Serves dist/ the same way Vercel does (clean URLs: /login -> login.html),
-      # waits until it responds, then runs every spec in cypress/e2e.
+      # Serves dist/ the same way Vercel does (clean URLs: /login -> login.html).
+      # The trailing & keeps it running in the background for the next steps.
+      - name: Start web server
+        run: npm run serve:web > serve.log 2>&1 &
+
+      # Retry until the server answers (max ~60 s), so Cypress never starts too early.
+      - name: Wait for web server
+        run: curl --retry 30 --retry-connrefused --retry-delay 2 --silent --fail --output /dev/null http://127.0.0.1:8081
+
       - name: E2E tests
-        uses: cypress-io/github-action@v6
-        with:
-          install: false
-          start: npm run serve:web
-          wait-on: http://127.0.0.1:8081
-          wait-on-timeout: 120
-          browser: electron
+        run: npx cypress run --browser electron
+
+      - name: Show web server log
+        if: failure()
+        run: cat serve.log
 
       - name: Upload screenshots of failed tests
         if: failure()
