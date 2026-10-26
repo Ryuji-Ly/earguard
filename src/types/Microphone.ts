@@ -13,3 +13,6 @@ export interface MicrophoneSession {
 export type StartListeningResult =
   | { ok: true; session: MicrophoneSession }
   | { ok: false; error: MicrophoneError };
+
+// Where the live meter is: not started, waiting for the permission prompt, measuring, or failed.
+export type MicrophoneStatus = 'idle' | 'requesting' | 'listening' | MicrophoneError;
