@@ -7,6 +7,7 @@
     "web": "expo start --web",
     "build:web": "expo export -p web",
     "typecheck": "tsc --noEmit",
+    "serve:web": "serve dist -l tcp://127.0.0.1:8081",
     "tunnel": "expo start --tunnel",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -37,6 +38,7 @@
     "@storybook/react-vite": "^10.5.10",
     "@types/react": "~18.3.12",
     "cypress": "^13.17.0",
+    "serve": "^14.2.6",
     "storybook": "^10.5.10",
     "typescript": "^5.3.3",
     "vite": "^5.4.11"

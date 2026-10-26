@@ -33,8 +33,9 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           install: false
-          start: npx serve@14 dist -l 8081
-          wait-on: http://localhost:8081
+          start: npm run serve:web
+          wait-on: http://127.0.0.1:8081
+          wait-on-timeout: 120
           browser: electron
 
       - name: Upload screenshots of failed tests
