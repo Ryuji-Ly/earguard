@@ -22,8 +22,8 @@ export function LevelBar({ db, color }: LevelBarProps) {
         <View style={[styles.fill, { width: `${percentage}%`, backgroundColor: color }]} />
       </View>
       <Row justify="space-between">
-        <Text size="sm" tone="muted">{MIN_DB} dB</Text>
-        <Text size="sm" tone="muted">{MAX_DB} dB</Text>
+        <Text variant="subtitle">{MIN_DB} dB</Text>
+        <Text variant="subtitle">{MAX_DB} dB</Text>
       </Row>
     </View>
   );

@@ -15,10 +15,10 @@ export function AuthHeader({ title, subtitle }: AuthHeaderProps) {
       <View style={styles.logo}>
         <Icon name="ear" size={36} color={colors.textInverse} />
       </View>
-      <Text size="xl" weight="bold" align="center" accessibilityRole="header">
+      <Text variant="title" align="center" accessibilityRole="header">
         {title}
       </Text>
-      <Text align="center" tone="muted">{subtitle}</Text>
+      <Text variant="subtitle" align="center">{subtitle}</Text>
     </Stack>
   );
 }

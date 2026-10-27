@@ -20,7 +20,7 @@ const toneByVariant: Record<BadgeVariant, TextTone> = {
 export function Badge({ label, variant = 'default', testID }: BadgeProps) {
   return (
     <View style={[styles.base, styles[variant]]} testID={testID}>
-      <Text size="sm" weight="bold" tone={toneByVariant[variant]}>{label}</Text>
+      <Text variant="label" tone={toneByVariant[variant]}>{label}</Text>
     </View>
   );
 }

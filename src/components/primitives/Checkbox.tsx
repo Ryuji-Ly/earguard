@@ -11,9 +11,9 @@ export function Checkbox({ label, checked, onChange }: CheckboxProps) {
   return (
     <Pressable onPress={() => onChange(!checked)} style={styles.container}>
       <View style={[styles.box, checked && styles.boxChecked]}>
-        {checked && <Text size="sm">✓</Text>}
+        {checked && <Text variant="label">✓</Text>}
       </View>
-      <Text size="md">{label}</Text>
+      <Text>{label}</Text>
     </Pressable>
   );
 }

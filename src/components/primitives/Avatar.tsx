@@ -19,7 +19,7 @@ export function Avatar({ uri, name, size = 'md' }: AvatarProps) {
 
   return (
     <View style={[styles.base, styles[size], styles.fallback]}>
-      <Text size="sm" weight="bold" tone="inverse">{initials}</Text>
+      <Text variant="label" tone="inverse">{initials}</Text>
     </View>
   );
 }

@@ -19,8 +19,8 @@ export function SafeTimeCard({ db }: SafeTimeCardProps) {
       <Row gap="md">
         <Icon name="time-outline" size={28} color={colors.primary} />
         <Stack gap="none" flex={1}>
-          <Text size="sm" tone="muted">Safe time at this level, without earplugs</Text>
-          <Text size="lg" weight="bold" testID="safe-time-value">{value}</Text>
+          <Text variant="subtitle">Safe time at this level, without earplugs</Text>
+          <Text variant="heading" testID="safe-time-value">{value}</Text>
         </Stack>
       </Row>
     </Card>

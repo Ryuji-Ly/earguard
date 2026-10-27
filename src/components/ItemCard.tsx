@@ -12,8 +12,8 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
   return (
     <Card onPress={onPress}>
       <Stack gap="sm" padding="md">
-        <Text size="lg" weight="bold">{item.title}</Text>
-        <Text size="sm">{item.category}</Text>
+        <Text variant="heading">{item.title}</Text>
+        <Text variant="subtitle">{item.category}</Text>
         <Text numberOfLines={2}>{item.description}</Text>
       </Stack>
     </Card>

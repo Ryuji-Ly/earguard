@@ -24,7 +24,7 @@ export function NavItem({ label, onPress, active = false, icon, testID }: NavIte
       {icon !== undefined && (
         <Icon name={icon} size={24} color={active ? colors.primary : colors.textMuted} />
       )}
-      <Text size="sm" weight={active ? 'bold' : 'normal'} tone={active ? 'primary' : 'muted'}>
+      <Text variant="label" tone={active ? 'primary' : 'muted'}>
         {label}
       </Text>
     </Pressable>

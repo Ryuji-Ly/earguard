@@ -28,7 +28,7 @@ export function Menu({ items, visible, onClose }: MenuProps) {
             }}
             style={styles.menuItem}
           >
-            <Text size="md">{item.label}</Text>
+            <Text>{item.label}</Text>
           </Pressable>
         ))}
       </View>

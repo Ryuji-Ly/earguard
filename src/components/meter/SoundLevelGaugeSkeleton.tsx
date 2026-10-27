@@ -10,7 +10,7 @@ export function SoundLevelGaugeSkeleton() {
     <Card testID="sound-level-gauge-loading">
       <Stack gap="md" align="center">
         <Skeleton width={140} height={64} borderRadius={radius.md} />
-        <Text tone="muted">Listening…</Text>
+        <Text variant="subtitle">Listening…</Text>
         <Skeleton height={8} borderRadius={radius.pill} />
       </Stack>
     </Card>

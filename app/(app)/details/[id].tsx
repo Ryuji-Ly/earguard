@@ -11,8 +11,8 @@ export default function DetailScreen() {
   return (
     <Screen padding="lg">
       <Stack gap="md">
-        <Text size="xl" weight="bold">Item Detail</Text>
-        <Text size="sm">ID: {id}</Text>
+        <Text variant="title">Item Detail</Text>
+        <Text variant="subtitle">ID: {id}</Text>
         <Text>Implement getItemById() in your itemService and render your data here.</Text>
       </Stack>
     </Screen>

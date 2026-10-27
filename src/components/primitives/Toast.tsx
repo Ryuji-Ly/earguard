@@ -12,7 +12,7 @@ export function Toast({ message, variant = 'default', visible }: ToastProps) {
 
   return (
     <View style={[styles.base, styles[variant]]}>
-      <Text size="sm">{message}</Text>
+      <Text>{message}</Text>
     </View>
   );
 }

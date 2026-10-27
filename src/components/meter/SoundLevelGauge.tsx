@@ -28,16 +28,16 @@ export function SoundLevelGauge({ db }: SoundLevelGaugeProps) {
         >
           <Stack gap="sm" align="center">
             <Row gap="sm" align="flex-end">
-              <Text size="display" weight="bold" testID="sound-level-value">{rounded}</Text>
-              <Text size="xl" tone="muted">dB</Text>
+              <Text variant="display" testID="sound-level-value">{rounded}</Text>
+              <Text variant="title" tone="muted">dB</Text>
             </Row>
             <Row gap="sm">
               <Icon name={style.icon} size={22} color={style.color} />
-              <Text size="lg" weight="bold" tone={style.tone} testID="sound-level-label">
+              <Text variant="heading" tone={style.tone} testID="sound-level-label">
                 {info.label}
               </Text>
             </Row>
-            <Text align="center" tone="muted">{info.description}</Text>
+            <Text variant="subtitle" align="center">{info.description}</Text>
           </Stack>
         </View>
         <LevelBar db={db} color={style.color} />

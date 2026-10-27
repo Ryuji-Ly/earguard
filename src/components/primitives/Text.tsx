@@ -1,12 +1,13 @@
 import { Text as RNText, StyleSheet } from 'react-native';
-import { colors, fontSize, lineHeight } from '@/theme';
+import { colors, typography, type TypographyVariant } from '@/theme';
 
 export type TextTone = 'default' | 'muted' | 'inverse' | 'primary' | 'safe' | 'caution' | 'danger';
 
 interface TextProps {
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'display';
-  weight?: 'normal' | 'medium' | 'bold';
+  // One named style from the type scale (font, size and weight together).
+  variant?: TypographyVariant;
+  // Defaults to 'muted' for subtitles and 'default' for everything else.
   tone?: TextTone;
   align?: 'left' | 'center' | 'right';
   numberOfLines?: number;
@@ -16,9 +17,8 @@ interface TextProps {
 
 export function Text({
   children,
-  size = 'md',
-  weight = 'normal',
-  tone = 'default',
+  variant = 'body',
+  tone = variant === 'subtitle' ? 'muted' : 'default',
   align = 'left',
   numberOfLines,
   accessibilityRole,
@@ -26,7 +26,7 @@ export function Text({
 }: TextProps) {
   return (
     <RNText
-      style={[styles.base, styles[size], styles[weight], styles[tone], { textAlign: align }]}
+      style={[variantStyles[variant], toneStyles[tone], { textAlign: align }]}
       numberOfLines={numberOfLines}
       accessibilityRole={accessibilityRole}
       testID={testID}
@@ -36,18 +36,9 @@ export function Text({
   );
 }
 
-const styles = StyleSheet.create({
-  base: {
-    color: colors.text,
-  },
-  sm: { fontSize: fontSize.sm, lineHeight: lineHeight.sm },
-  md: { fontSize: fontSize.md, lineHeight: lineHeight.md },
-  lg: { fontSize: fontSize.lg, lineHeight: lineHeight.lg },
-  xl: { fontSize: fontSize.xl, lineHeight: lineHeight.xl },
-  display: { fontSize: fontSize.display, lineHeight: lineHeight.display },
-  normal: { fontWeight: '400' },
-  medium: { fontWeight: '500' },
-  bold: { fontWeight: '700' },
+const variantStyles = StyleSheet.create(typography);
+
+const toneStyles = StyleSheet.create({
   default: { color: colors.text },
   muted: { color: colors.textMuted },
   inverse: { color: colors.textInverse },

@@ -35,24 +35,29 @@ export const radius = {
   pill: 999,
 };
 
-export const fontSize = {
-  sm: 13,
-  md: 15,
-  lg: 17,
-  xl: 22,
-  display: 64,
+// One font family (Inter) in three weights. Each weight is its own font file, so on
+// Android the weight is chosen through the family name, not fontWeight.
+// The names must match the keys passed to useFonts in app/_layout.tsx.
+export const fontFamily = {
+  regular: 'Inter_400Regular',
+  semibold: 'Inter_600SemiBold',
+  bold: 'Inter_700Bold',
 };
 
-export const lineHeight = {
-  sm: 18,
-  md: 22,
-  lg: 24,
-  xl: 30,
-  display: 72,
+// The complete type scale. Text picks one of these by name, so every screen
+// uses the same handful of styles instead of mixing sizes and weights freely.
+export const typography = {
+  display: { fontFamily: fontFamily.bold, fontSize: 64, lineHeight: 72 }, // the big dB number
+  title: { fontFamily: fontFamily.bold, fontSize: 24, lineHeight: 32 }, // screen titles
+  heading: { fontFamily: fontFamily.semibold, fontSize: 18, lineHeight: 24 }, // card titles, key values
+  body: { fontFamily: fontFamily.regular, fontSize: 16, lineHeight: 24 }, // normal text, inputs
+  button: { fontFamily: fontFamily.semibold, fontSize: 16, lineHeight: 24 }, // button labels
+  subtitle: { fontFamily: fontFamily.regular, fontSize: 14, lineHeight: 20 }, // all secondary/supporting text
+  label: { fontFamily: fontFamily.semibold, fontSize: 14, lineHeight: 20 }, // badges, chips, tabs, field labels
 };
 
 // Minimum touch target (Apple HIG 44pt, Material 48dp).
 export const touchTarget = 48;
 
 export type Spacing = keyof typeof spacing;
-export type FontSize = keyof typeof fontSize;
+export type TypographyVariant = keyof typeof typography;

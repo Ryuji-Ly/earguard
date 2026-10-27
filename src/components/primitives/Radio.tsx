@@ -14,7 +14,7 @@ export function Radio({ label, value, selected, onSelect }: RadioProps) {
       <View style={[styles.circle, selected && styles.circleSelected]}>
         {selected && <View style={styles.dot} />}
       </View>
-      <Text size="md">{label}</Text>
+      <Text>{label}</Text>
     </Pressable>
   );
 }

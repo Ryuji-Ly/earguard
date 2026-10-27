@@ -19,7 +19,7 @@ export function Chip({ label, selected, onPress, testID }: ChipProps) {
       accessibilityState={{ checked: selected }}
       testID={testID}
     >
-      <Text size="sm" weight={selected ? 'bold' : 'medium'} tone={selected ? 'inverse' : 'default'}>
+      <Text variant="label" tone={selected ? 'inverse' : 'default'}>
         {label}
       </Text>
     </Pressable>

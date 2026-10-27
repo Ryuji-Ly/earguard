@@ -47,7 +47,7 @@ export function LiveMeterControl({ status, onStart, onStop }: LiveMeterControlPr
     return (
       <Stack gap="sm">
         <StyledButton label="Stop measuring" onPress={onStop} variant="secondary" testID="live-stop-button" />
-        <Text size="sm" tone="muted" align="center" testID="live-estimate-note">
+        <Text variant="subtitle" align="center" testID="live-estimate-note">
           Estimate: phone microphones aren't calibrated, so treat values as a guide.
         </Text>
       </Stack>
@@ -71,9 +71,9 @@ export function LiveMeterControl({ status, onStart, onStop }: LiveMeterControlPr
       <Stack gap="md">
         <Row gap="sm">
           <Icon name={content.icon} size={22} color={colors.caution} />
-          <Text weight="bold" tone="caution">{content.title}</Text>
+          <Text variant="heading" tone="caution">{content.title}</Text>
         </Row>
-        <Text tone="muted" testID="mic-error-message">{content.message}</Text>
+        <Text testID="mic-error-message">{content.message}</Text>
         {content.canRetry && (
           <StyledButton label="Try again" onPress={onStart} variant="secondary" testID="live-retry-button" />
         )}

@@ -15,8 +15,8 @@ export function ProfileCard({ name, email }: ProfileCardProps) {
       <Row gap="md">
         <Avatar name={name} />
         <Stack gap="none" flex={1}>
-          <Text size="lg" weight="bold" testID="profile-name">{name}</Text>
-          <Text size="sm" tone="muted" testID="profile-email">{email}</Text>
+          <Text variant="heading" testID="profile-name">{name}</Text>
+          <Text variant="subtitle" testID="profile-email">{email}</Text>
         </Stack>
       </Row>
     </Card>

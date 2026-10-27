@@ -40,7 +40,7 @@ export function StyledButton({
       {isLoading ? (
         <Spinner size="small" />
       ) : (
-        <Text weight="bold" tone={variant === 'primary' ? 'inverse' : 'default'}>
+        <Text variant="button" tone={variant === 'primary' ? 'inverse' : 'default'}>
           {label}
         </Text>
       )}

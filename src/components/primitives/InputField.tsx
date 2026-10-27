@@ -1,6 +1,6 @@
 import { TextInput, View, StyleSheet } from 'react-native';
 import { Text } from './Text';
-import { colors, fontSize, radius, spacing, touchTarget } from '@/theme';
+import { colors, radius, spacing, touchTarget, typography } from '@/theme';
 
 interface InputFieldProps {
   label: string;
@@ -25,7 +25,7 @@ export function InputField({
 }: InputFieldProps) {
   return (
     <View style={styles.container}>
-      <Text size="sm" weight="medium">{label}</Text>
+      <Text variant="label">{label}</Text>
       <TextInput
         value={value}
         onChangeText={onChangeText}
@@ -39,7 +39,7 @@ export function InputField({
         autoCapitalize="none"
       />
       {error !== undefined && (
-        <Text size="sm" tone="danger" testID={testID !== undefined ? `${testID}-error` : undefined}>
+        <Text variant="subtitle" tone="danger" testID={testID !== undefined ? `${testID}-error` : undefined}>
           {error}
         </Text>
       )}
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
     color: colors.text,
-    fontSize: fontSize.md,
+    ...typography.body,
   },
   inputError: { borderColor: colors.danger },
 });

@@ -20,8 +20,8 @@ export function TipCard({ tip, expanded, onToggle }: TipCardProps) {
         <Row gap="md" align="flex-start">
           <Icon name={tip.icon} size={24} color={colors.primary} />
           <Stack gap="xs" flex={1}>
-            <Text weight="bold">{tip.title}</Text>
-            <Text size="sm" tone="muted">{tip.summary}</Text>
+            <Text variant="heading">{tip.title}</Text>
+            <Text variant="subtitle">{tip.summary}</Text>
           </Stack>
           <Icon name={expanded ? 'chevron-up' : 'chevron-down'} size={20} color={colors.textMuted} />
         </Row>

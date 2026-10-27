@@ -9,10 +9,10 @@ interface TagProps {
 export function Tag({ label, onRemove }: TagProps) {
   return (
     <View style={styles.base}>
-      <Text size="sm">{label}</Text>
+      <Text variant="label">{label}</Text>
       {onRemove !== undefined && (
         <Pressable onPress={onRemove} style={styles.removeButton}>
-          <Text size="sm">×</Text>
+          <Text variant="label">×</Text>
         </Pressable>
       )}
     </View>

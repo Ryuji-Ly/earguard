@@ -12,8 +12,8 @@ export function ScreenHeader({ title, subtitle, accessory }: ScreenHeaderProps) 
   return (
     <Row justify="space-between" align="flex-start" gap="md">
       <Stack gap="none" flex={1}>
-        <Text size="xl" weight="bold" accessibilityRole="header">{title}</Text>
-        {subtitle !== undefined && <Text tone="muted">{subtitle}</Text>}
+        <Text variant="title" accessibilityRole="header">{title}</Text>
+        {subtitle !== undefined && <Text variant="subtitle">{subtitle}</Text>}
       </Stack>
       {accessory}
     </Row>

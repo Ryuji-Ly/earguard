@@ -12,9 +12,9 @@ export function DemoCredentials({ email, password }: DemoCredentialsProps) {
   return (
     <Card testID="demo-credentials">
       <Stack gap="sm">
-        <Text size="sm" weight="bold">Demo account</Text>
-        <Text size="sm" tone="muted">Email: {email}</Text>
-        <Text size="sm" tone="muted">Password: {password}</Text>
+        <Text variant="label">Demo account</Text>
+        <Text variant="subtitle">Email: {email}</Text>
+        <Text variant="subtitle">Password: {password}</Text>
       </Stack>
     </Card>
   );

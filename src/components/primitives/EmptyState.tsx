@@ -15,8 +15,8 @@ export function EmptyState({ title, description, icon, action, testID }: EmptySt
   return (
     <View style={styles.base} testID={testID}>
       {icon !== undefined && <Icon name={icon} size={40} color={colors.textMuted} />}
-      <Text size="lg" weight="bold" align="center">{title}</Text>
-      {description !== undefined && <Text align="center" tone="muted">{description}</Text>}
+      <Text variant="heading" align="center">{title}</Text>
+      {description !== undefined && <Text variant="subtitle" align="center">{description}</Text>}
       {action !== undefined && <View style={styles.action}>{action}</View>}
     </View>
   );

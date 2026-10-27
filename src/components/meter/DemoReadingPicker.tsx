@@ -14,7 +14,7 @@ interface DemoReadingPickerProps {
 export function DemoReadingPicker({ readings, selectedId, onSelect }: DemoReadingPickerProps) {
   return (
     <Stack gap="sm">
-      <Text size="sm" tone="muted">Try a typical festival spot</Text>
+      <Text variant="subtitle">Try a typical festival spot</Text>
       <View accessibilityRole="radiogroup">
         <Row gap="sm" wrap>
           {readings.map((reading) => (
