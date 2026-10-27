@@ -1,34 +1,50 @@
+import type { User as SupabaseUser } from '@supabase/supabase-js';
+import { supabase } from '@/services/supabase';
 import type { Credentials } from '@/types/Credentials';
 import type { User } from '@/types/User';
-import { mockAccounts } from '@/services/mock/users';
 
-// Simulated network latency so loading states are visible, like a real backend call.
-const MOCK_DELAY_MS = 600;
+// Real login through Supabase Auth. The demo account exists in the Supabase project
+// (Authentication → Users) and is listed in the README so the lecturer can log in.
+const demoCredentials: Credentials = { email: 'demo@earguard.app', password: 'festival123' };
 
-function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+export function getDemoCredentials(): Credentials {
+  return demoCredentials;
 }
 
-// Mocked for the PWA. Replace the body with Supabase auth later; the signature stays the same.
 export async function login(email: string, password: string): Promise<User> {
-  await wait(MOCK_DELAY_MS);
-  const normalisedEmail = email.trim().toLowerCase();
-  const account = mockAccounts.find(
-    (candidate) => candidate.user.email === normalisedEmail && candidate.password === password,
-  );
-  if (account === undefined) {
-    throw new Error('Invalid email or password');
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.trim().toLowerCase(),
+    password,
+  });
+  if (error !== null) {
+    // Status 0 / no status means the request never reached Supabase (offline, blocked, ...).
+    if (error.status === undefined || error.status === 0) {
+      throw new Error("Can't reach the server. Check your internet connection and try again.");
+    }
+    throw new Error('Invalid email or password.');
   }
-  return account.user;
+  return toUser(data.user);
 }
 
-// Only meaningful while login is mocked; remove together with the mock.
-export function getDemoCredentials(): Credentials | undefined {
-  const account = mockAccounts[0];
-  if (account === undefined) return undefined;
-  return { email: account.user.email, password: account.password };
+// The session Supabase saved on this device, if any (stays logged in after a refresh).
+export async function getCurrentUser(): Promise<User | undefined> {
+  const { data } = await supabase.auth.getSession();
+  return data.session === null ? undefined : toUser(data.session.user);
 }
 
 export async function logout(): Promise<void> {
-  await wait(MOCK_DELAY_MS / 2);
+  // 'local' only ends the session on this device and works offline too.
+  await supabase.auth.signOut({ scope: 'local' });
+}
+
+// Supabase's user object has many fields; the app only needs these.
+function toUser(user: SupabaseUser): User {
+  const email = user.email ?? '';
+  const metadataName: unknown = user.user_metadata.name;
+  return {
+    id: user.id,
+    email,
+    // No name stored yet: fall back to the part of the email before the @.
+    name: typeof metadataName === 'string' ? metadataName : email.split('@')[0] ?? email,
+  };
 }

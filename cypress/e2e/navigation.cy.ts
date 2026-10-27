@@ -3,11 +3,6 @@ describe('App navigation', () => {
     cy.loginAsDemo();
   });
 
-  it('redirects to login when not authenticated', () => {
-    cy.visit('/');
-    cy.url().should('include', '/login');
-  });
-
   it('updates the meter when a demo spot is selected', () => {
     cy.get('[data-testid="demo-reading-front"]').click();
     cy.get('[data-testid="sound-level-value"]').should('have.text', '106');

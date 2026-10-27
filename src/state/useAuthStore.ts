@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import {
+  getCurrentUser,
   getDemoCredentials,
   login as loginService,
   logout as logoutService,
@@ -11,8 +12,12 @@ interface AuthState {
   user: User | undefined;
   isAuthenticated: boolean;
   isLoading: boolean;
-  // Only set while login is mocked, so the login screen can show the demo account.
-  demoCredentials: Credentials | undefined;
+  // True until we've checked for a saved session at startup. While true, the app
+  // shows a loader instead of sending the user to the login screen too early.
+  isRestoring: boolean;
+  // Shown on the login screen so the lecturer can log in with the demo account.
+  demoCredentials: Credentials;
+  restoreSession: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -21,7 +26,16 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: undefined,
   isAuthenticated: false,
   isLoading: false,
+  isRestoring: true,
   demoCredentials: getDemoCredentials(),
+  restoreSession: async () => {
+    try {
+      const user = await getCurrentUser();
+      set({ user, isAuthenticated: user !== undefined });
+    } finally {
+      set({ isRestoring: false });
+    }
+  },
   login: async (email, password) => {
     set({ isLoading: true });
     try {
@@ -33,7 +47,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
   logout: async () => {
-    await logoutService();
-    set({ user: undefined, isAuthenticated: false });
+    try {
+      await logoutService();
+    } finally {
+      // Clear the local state even if Supabase couldn't be reached.
+      set({ user: undefined, isAuthenticated: false });
+    }
   },
 }));
