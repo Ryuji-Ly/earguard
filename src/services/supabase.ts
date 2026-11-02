@@ -1,6 +1,7 @@
 import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/types/Database';
 
 // The one Supabase client for the whole app. Only services import this file;
 // pages, components and stores never talk to Supabase directly.
@@ -21,7 +22,7 @@ if (!supabaseUrl || !supabaseKey) {
 // keeps the login in AsyncStorage so it survives a refresh or app restart.
 const isServer = typeof window === 'undefined';
 
-export const supabase = createClient(supabaseUrl, supabaseKey, {
+export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
   auth: {
     storage: isServer ? undefined : AsyncStorage,
     persistSession: !isServer,

@@ -7,6 +7,7 @@ interface RowProps {
   align?: 'flex-start' | 'center' | 'flex-end' | 'stretch';
   justify?: 'flex-start' | 'center' | 'flex-end' | 'space-between';
   wrap?: boolean;
+  testID?: string;
 }
 
 export function Row({
@@ -15,6 +16,7 @@ export function Row({
   align = 'center',
   justify = 'flex-start',
   wrap = false,
+  testID,
 }: RowProps) {
   return (
     <View
@@ -24,6 +26,7 @@ export function Row({
         { alignItems: align, justifyContent: justify },
         wrap && styles.wrap,
       ]}
+      testID={testID}
     >
       {children}
     </View>
