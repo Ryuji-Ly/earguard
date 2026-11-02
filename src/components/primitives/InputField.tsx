@@ -9,6 +9,8 @@ interface InputFieldProps {
   placeholder?: string;
   secureTextEntry?: boolean;
   keyboardType?: 'default' | 'email-address';
+  // 'words' for names; 'none' (default) for emails and passwords.
+  autoCapitalize?: 'none' | 'words';
   error?: string;
   testID?: string;
 }
@@ -20,6 +22,7 @@ export function InputField({
   placeholder,
   secureTextEntry = false,
   keyboardType = 'default',
+  autoCapitalize = 'none',
   error,
   testID,
 }: InputFieldProps) {
@@ -36,7 +39,7 @@ export function InputField({
         style={[styles.input, error !== undefined && styles.inputError]}
         accessibilityLabel={label}
         testID={testID}
-        autoCapitalize="none"
+        autoCapitalize={autoCapitalize}
       />
       {error !== undefined && (
         <Text variant="subtitle" tone="danger" testID={testID !== undefined ? `${testID}-error` : undefined}>

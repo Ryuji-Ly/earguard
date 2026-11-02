@@ -6,7 +6,8 @@ import { colors, radius, spacing, touchTarget } from '@/theme';
 interface StyledButtonProps {
   label: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary';
+  // danger: destructive actions such as deleting.
+  variant?: 'primary' | 'secondary' | 'danger';
   isLoading?: boolean;
   disabled?: boolean;
   testID?: string;
@@ -38,9 +39,9 @@ export function StyledButton({
       testID={testID}
     >
       {isLoading ? (
-        <Spinner size="small" />
+        <Spinner size="small" color={variant === 'secondary' ? colors.primary : colors.textInverse} />
       ) : (
-        <Text variant="button" tone={variant === 'primary' ? 'inverse' : 'default'}>
+        <Text variant="button" tone={variant === 'secondary' ? 'default' : 'inverse'}>
           {label}
         </Text>
       )}
@@ -58,10 +59,12 @@ const styles = StyleSheet.create({
   },
   primary: { backgroundColor: colors.primary },
   secondary: { backgroundColor: colors.surfaceRaised, borderWidth: 1, borderColor: colors.border },
+  danger: { backgroundColor: colors.danger },
   disabled: { opacity: 0.5 },
 });
 
 const pressedStyles = StyleSheet.create({
   primary: { backgroundColor: colors.primaryPressed },
   secondary: { backgroundColor: colors.border },
+  danger: { backgroundColor: colors.dangerPressed },
 });

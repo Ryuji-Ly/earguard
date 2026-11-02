@@ -14,6 +14,7 @@ export const colors = {
   safe: '#3DD68C',
   caution: '#FFC145',
   danger: '#FF6B6B',
+  dangerPressed: '#E85656',
   safeSoft: '#173A2A',
   cautionSoft: '#3D3219',
   dangerSoft: '#3F1E21',

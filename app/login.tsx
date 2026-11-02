@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { useAuthStore } from '@/state/useAuthStore';
 import { AuthHeader } from '@/components/auth/AuthHeader';
+import { AuthSwitchLink } from '@/components/auth/AuthSwitchLink';
 import { DemoCredentials } from '@/components/auth/DemoCredentials';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { Screen } from '@/components/primitives/Screen';
@@ -10,17 +11,21 @@ import { Stack } from '@/components/primitives/Stack';
 
 export default function LoginScreen() {
   const [error, setError] = useState<string | undefined>(undefined);
-  const { login, isLoading, demoCredentials } = useAuthStore();
+  const { login, isLoading, isAuthenticated, demoCredentials } = useAuthStore();
 
   const handleLogin = async (email: string, password: string) => {
     setError(undefined);
     try {
+      // On success the store sets isAuthenticated, and the Redirect below takes over.
       await login(email, password);
-      router.replace('/');
-    } catch {
-      setError('Login failed. Check your email and password.');
+    } catch (loginError) {
+      // The service throws user-friendly messages (wrong password vs. no connection).
+      setError(loginError instanceof Error ? loginError.message : 'Login failed. Please try again.');
     }
   };
+
+  // Already logged in (e.g. saved session): skip the login screen.
+  if (isAuthenticated) return <Redirect href="/" />;
 
   return (
     <Screen padding="lg" testID="login-screen">
@@ -28,9 +33,13 @@ export default function LoginScreen() {
         <Stack gap="lg">
           <AuthHeader title="EarGuard" subtitle="Enjoy the music, keep your hearing." />
           <LoginForm onSubmit={handleLogin} isLoading={isLoading} error={error} />
-          {demoCredentials !== undefined && (
-            <DemoCredentials email={demoCredentials.email} password={demoCredentials.password} />
-          )}
+          <AuthSwitchLink
+            prompt="No account yet?"
+            actionLabel="Create one"
+            onPress={() => router.replace('/register')}
+            testID="go-to-register"
+          />
+          <DemoCredentials email={demoCredentials.email} password={demoCredentials.password} />
         </Stack>
       </View>
     </Screen>

@@ -1,4 +1,5 @@
 import { useMeterStore } from '@/state/useMeterStore';
+import { MIN_SESSION_SECONDS, useSessionsStore } from '@/state/useSessionsStore';
 import { Badge } from '@/components/primitives/Badge';
 import { Screen } from '@/components/primitives/Screen';
 import { Stack } from '@/components/primitives/Stack';
@@ -8,9 +9,11 @@ import { LiveMeterControl } from '@/components/meter/LiveMeterControl';
 import { SafeTimeCard } from '@/components/meter/SafeTimeCard';
 import { SoundLevelGauge } from '@/components/meter/SoundLevelGauge';
 import { SoundLevelGaugeSkeleton } from '@/components/meter/SoundLevelGaugeSkeleton';
+import { SessionSummaryCard } from '@/components/sessions/SessionSummaryCard';
 
 export default function MeterScreen() {
-  const { mode, demoReadings, selectedDemoId, micStatus, liveDb, selectDemo, startLive, stopLive } = useMeterStore();
+  const { mode, demoReadings, selectedDemoId, micStatus, liveDb, tally, selectDemo, startLive, stopLive } = useMeterStore();
+  const { lastSession, saveStatus, saveError, retrySave } = useSessionsStore();
   const isLive = mode === 'live';
   const selected = demoReadings.find((reading) => reading.id === selectedDemoId);
   const db = isLive ? liveDb : selected?.db;
@@ -27,6 +30,15 @@ export default function MeterScreen() {
               : <Badge label="Demo" variant="warning" testID="demo-badge" />
           }
         />
+        {!isLive && lastSession !== undefined && saveStatus !== undefined && (
+          <SessionSummaryCard
+            session={lastSession}
+            saveStatus={saveStatus}
+            saveError={saveError}
+            minSeconds={MIN_SESSION_SECONDS}
+            onRetry={retrySave}
+          />
+        )}
         {db !== undefined ? (
           <>
             <SoundLevelGauge db={db} />
@@ -35,7 +47,7 @@ export default function MeterScreen() {
         ) : (
           isLive && <SoundLevelGaugeSkeleton />
         )}
-        <LiveMeterControl status={micStatus} onStart={startLive} onStop={stopLive} />
+        <LiveMeterControl status={micStatus} tally={tally} onStart={startLive} onStop={stopLive} />
         {!isLive && (
           <DemoReadingPicker readings={demoReadings} selectedId={selectedDemoId} onSelect={selectDemo} />
         )}

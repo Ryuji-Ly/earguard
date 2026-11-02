@@ -5,10 +5,13 @@ import { Stack } from '@/components/primitives/Stack';
 import { Text } from '@/components/primitives/Text';
 import { StyledButton } from '@/components/StyledButton';
 import { colors } from '@/theme';
+import { formatDose, formatDuration, summariseTally, type ExposureTally } from '@/utils/exposure';
 import type { MicrophoneError, MicrophoneStatus } from '@/types/Microphone';
 
 interface LiveMeterControlProps {
   status: MicrophoneStatus;
+  // Running totals while measuring, for the "recording" line.
+  tally?: ExposureTally;
   onStart: () => void;
   onStop: () => void;
 }
@@ -42,10 +45,16 @@ const errorContent: Record<MicrophoneError, ErrorContent> = {
   },
 };
 
-export function LiveMeterControl({ status, onStart, onStop }: LiveMeterControlProps) {
+export function LiveMeterControl({ status, tally, onStart, onStop }: LiveMeterControlProps) {
   if (status === 'listening') {
+    const progress = tally === undefined ? undefined : summariseTally(tally);
     return (
       <Stack gap="sm">
+        {progress !== undefined && (
+          <Text variant="label" align="center" testID="live-session-progress">
+            Recording · {formatDuration(progress.durationSeconds / 60)} · {formatDose(progress.dosePercent)} of daily dose
+          </Text>
+        )}
         <StyledButton label="Stop measuring" onPress={onStop} variant="secondary" testID="live-stop-button" />
         <Text variant="subtitle" align="center" testID="live-estimate-note">
           Estimate: phone microphones aren't calibrated, so treat values as a guide.

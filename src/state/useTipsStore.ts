@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 import { getTips } from '@/services/tipService';
+import type { LoadStatus } from '@/types/LoadStatus';
 import type { Tip } from '@/types/Tip';
-
-type LoadStatus = 'idle' | 'loading' | 'loaded' | 'error';
 
 interface TipsState {
   tips: Tip[];
