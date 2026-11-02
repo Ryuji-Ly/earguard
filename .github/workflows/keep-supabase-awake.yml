@@ -1,0 +1,32 @@
+# Supabase pauses free projects after about a week without database activity.
+# Every 3 days this logs in as the demo user and reads the sessions table: real
+# activity on both Auth and the database, so the project stays awake for demos and grading.
+# Note: GitHub only runs scheduled workflows from the repository's default branch.
+name: Keep Supabase awake
+
+on:
+  schedule:
+    - cron: '0 6 */3 * *' # 06:00 UTC every third day
+  workflow_dispatch: # adds a "Run workflow" button on the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ vars.EXPO_PUBLIC_SUPABASE_URL }}
+      SUPABASE_KEY: ${{ vars.EXPO_PUBLIC_SUPABASE_KEY }}
+    steps:
+      - name: Log in as the demo user and read from the database
+        run: |
+          set -euo pipefail
+          # The demo account is public on purpose (it's on the login screen and in the README).
+          token=$(curl --silent --fail \
+            "$SUPABASE_URL/auth/v1/token?grant_type=password" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"email":"demo@earguard.app","password":"festival123"}' | jq -r '.access_token')
+          curl --silent --fail --output /dev/null \
+            "$SUPABASE_URL/rest/v1/measurement_sessions?select=id&limit=1" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $token"
+          echo "Supabase is awake."
