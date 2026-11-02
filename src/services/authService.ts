@@ -26,6 +26,36 @@ export async function login(email: string, password: string): Promise<User> {
   return toUser(data.user);
 }
 
+// Creates an account and logs straight in. Requires "Confirm email" to be turned off in
+// Supabase (Authentication → Sign In / Providers → Email); otherwise there's no session yet.
+export async function register(name: string, email: string, password: string): Promise<User> {
+  const { data, error } = await supabase.auth.signUp({
+    email: email.trim().toLowerCase(),
+    password,
+    // Stored on the Supabase user as user_metadata.name; toUser() reads it back.
+    options: { data: { name: name.trim() } },
+  });
+  if (error !== null) {
+    if (error.status === undefined || error.status === 0) {
+      throw new Error("Can't reach the server. Check your internet connection and try again.");
+    }
+    if (error.code === 'user_already_exists') {
+      throw new Error('An account with this email already exists. Try logging in.');
+    }
+    if (error.code === 'weak_password') {
+      throw new Error('Choose a stronger password (at least 6 characters).');
+    }
+    if (error.code === 'validation_failed' || error.code === 'email_address_invalid') {
+      throw new Error('Enter a valid email address.');
+    }
+    throw new Error('Could not create the account. Please try again.');
+  }
+  if (data.session === null || data.user === null) {
+    throw new Error('Account created, but it needs email confirmation first.');
+  }
+  return toUser(data.user);
+}
+
 // The session Supabase saved on this device, if any (stays logged in after a refresh).
 export async function getCurrentUser(): Promise<User | undefined> {
   const { data } = await supabase.auth.getSession();

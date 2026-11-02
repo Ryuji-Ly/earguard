@@ -4,6 +4,7 @@ import {
   getDemoCredentials,
   login as loginService,
   logout as logoutService,
+  register as registerService,
 } from '@/services/authService';
 import type { Credentials } from '@/types/Credentials';
 import type { User } from '@/types/User';
@@ -19,6 +20,7 @@ interface AuthState {
   demoCredentials: Credentials;
   restoreSession: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -40,6 +42,16 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true });
     try {
       const user = await loginService(email, password);
+      set({ user, isAuthenticated: true, isLoading: false });
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+  register: async (name, email, password) => {
+    set({ isLoading: true });
+    try {
+      const user = await registerService(name, email, password);
       set({ user, isAuthenticated: true, isLoading: false });
     } catch (error) {
       set({ isLoading: false });

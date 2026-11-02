@@ -7,7 +7,7 @@ interface DemoCredentialsProps {
   password: string;
 }
 
-// Shown on the login screen while login is mocked, so testers don't need the README.
+// Shown on the login screen so testers (and the lecturer) can log in without the README.
 export function DemoCredentials({ email, password }: DemoCredentialsProps) {
   return (
     <Card testID="demo-credentials">
