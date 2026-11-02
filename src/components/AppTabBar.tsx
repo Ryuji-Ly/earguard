@@ -15,6 +15,7 @@ interface TabDefinition {
 
 const tabs: TabDefinition[] = [
   { label: 'Meter', href: '/', path: '/', icon: 'pulse-outline', activeIcon: 'pulse', testID: 'tab-meter' },
+  { label: 'History', href: '/history', path: '/history', icon: 'time-outline', activeIcon: 'time', testID: 'tab-history' },
   { label: 'Learn', href: '/learn', path: '/learn', icon: 'book-outline', activeIcon: 'book', testID: 'tab-learn' },
   { label: 'Profile', href: '/profile', path: '/profile', icon: 'person-outline', activeIcon: 'person', testID: 'tab-profile' },
 ];

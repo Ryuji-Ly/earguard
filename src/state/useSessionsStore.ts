@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { getSessions, saveSession } from '@/services/sessionService';
+import { deleteSession, getSessions, saveSession } from '@/services/sessionService';
 import type { LoadStatus } from '@/types/LoadStatus';
 import type { MeasurementSession, NewMeasurementSession } from '@/types/MeasurementSession';
 
@@ -18,16 +18,23 @@ interface SessionsState {
   lastSession: NewMeasurementSession | undefined;
   saveStatus: SaveStatus | undefined;
   saveError: string | undefined;
+  // The session being deleted right now, and why the last delete failed (if it did).
+  deletingId: string | undefined;
+  deleteError: string | undefined;
   loadSessions: (force?: boolean) => Promise<void>;
   recordSession: (session: NewMeasurementSession) => Promise<void>;
   retrySave: () => Promise<void>;
   clearLastSession: () => void;
+  removeSession: (id: string) => Promise<void>;
   // Forget everything, e.g. on logout, so the next user never sees these sessions.
   reset: () => void;
 }
 
 // The data part of the store (no actions); reused by reset().
-type SessionsData = Omit<SessionsState, 'loadSessions' | 'recordSession' | 'retrySave' | 'clearLastSession' | 'reset'>;
+type SessionsData = Omit<
+  SessionsState,
+  'loadSessions' | 'recordSession' | 'retrySave' | 'clearLastSession' | 'removeSession' | 'reset'
+>;
 
 const initialState: SessionsData = {
   sessions: [],
@@ -36,6 +43,8 @@ const initialState: SessionsData = {
   lastSession: undefined,
   saveStatus: undefined,
   saveError: undefined,
+  deletingId: undefined,
+  deleteError: undefined,
 };
 
 export const useSessionsStore = create<SessionsState>((set, get) => ({
@@ -76,6 +85,18 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
   },
 
   clearLastSession: () => set({ lastSession: undefined, saveStatus: undefined, saveError: undefined }),
+
+  removeSession: async (id) => {
+    set({ deletingId: id, deleteError: undefined });
+    try {
+      await deleteSession(id);
+      set({ sessions: get().sessions.filter((session) => session.id !== id) });
+    } catch (error) {
+      set({ deleteError: error instanceof Error ? error.message : 'Could not delete this session.' });
+    } finally {
+      set({ deletingId: undefined });
+    }
+  },
 
   reset: () => set(initialState),
 }));

@@ -99,3 +99,13 @@ export function formatDose(dosePercent: number): string {
   // Small doses keep one decimal so a short session doesn't show as 0%.
   return dosePercent < 10 ? `${dosePercent.toFixed(1)}%` : `${Math.round(dosePercent)}%`;
 }
+
+// Compact duration for tight spaces such as stat columns: "2h 30m", "45m", "<1m".
+export function formatDurationShort(seconds: number): string {
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 1) return '<1m';
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return rest === 0 ? `${hours}h` : `${hours}h ${rest}m`;
+}
